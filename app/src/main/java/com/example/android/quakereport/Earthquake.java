@@ -13,7 +13,7 @@ public class Earthquake {
     /** Location of the earthquak */
     private String mLocation;
 
-    /** Date of the earthquak */
+    /** Date of the earthquake */
     private String mDate;
 
     /** Time of the earthquake */

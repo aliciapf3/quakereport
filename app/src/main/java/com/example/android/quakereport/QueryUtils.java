@@ -24,17 +24,16 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Helper methods related to requesting and receiving earthquake data from USGS.
+ */
+public final class QueryUtils {
+
+
     /**
-    * Helper methods related to requesting and receiving earthquake data from USGS.
-    */
-    public final class QueryUtils {
-
-
-        /**
-         * Tag for the log messages
-         */
-        private static final String LOG_TAG = QueryUtils.class.getSimpleName();
-
+     * Tag for the log messages
+     */
+    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
 
     /**
@@ -47,30 +46,28 @@ import java.util.Date;
     }
 
 
+    /**
+     * Query the USGS dataset and return a list of {@link Earthquake} objects.
+     */
+    public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
+        // Create URL object
+        URL url = createUrl(requestUrl);
 
-        /**
-         * Query the USGS dataset and return a list of {@link Earthquake} objects.
-         */
-        public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
-            // Create URL object
-            URL url = createUrl(requestUrl);
 
-            // Perform HTTP request to the URL and receive a JSON response back
-            String jsonResponse = null;
-            try {
-                jsonResponse = makeHttpRequest(url);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Problem making the HTTP request.", e);
-            }
-
-            // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-            List<Earthquake> earthquakes = extractFeatureFromJson(jsonResponse);
-
-            // Return the list of {@link Earthquake}s
-            return earthquakes;
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<Earthquake> earthquakes = extractFeatureFromJson(jsonResponse);
 
+        // Return the list of {@link Earthquake}s
+        return earthquakes;
+    }
 
 
     /**
@@ -149,23 +146,18 @@ import java.util.Date;
     }
 
 
+    /**
+     * Return a list of {@link Earthquake} objects that has been built up from
+     * parsing the given JSON response.
+     */
+    private static List<Earthquake> extractFeatureFromJson(String earthquakeJSON) {
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(earthquakeJSON)) {
+            return null;
+        }
 
-
-
-
-
-        /**
-         * Return a list of {@link Earthquake} objects that has been built up from
-         * parsing the given JSON response.
-         */
-        private static List<Earthquake> extractFeatureFromJson(String earthquakeJSON) {
-            // If the JSON string is empty or null, then return early.
-            if (TextUtils.isEmpty(earthquakeJSON)) {
-                return null;
-            }
-
-            // Create an empty ArrayList that we can start adding earthquakes to
-            List<Earthquake> earthquakes = new ArrayList<>();
+        // Create an empty ArrayList that we can start adding earthquakes to
+        List<Earthquake> earthquakes = new ArrayList<>();
 
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
@@ -185,7 +177,7 @@ import java.util.Date;
             JSONArray earthquakeArray = baseJsonresponse.getJSONArray("features");
 
             // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
-            for(int i = 0; i < earthquakeArray.length(); i++) {
+            for (int i = 0; i < earthquakeArray.length(); i++) {
 
                 // Get a single earthquake at position i within the list of earthquakes
                 JSONObject currentEarthquake = earthquakeArray.getJSONObject(i);
@@ -211,8 +203,8 @@ import java.util.Date;
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
                 // and url from the JSON response.
-            Earthquake earthquake = new Earthquake(magnitude, location, time, url);
-            earthquakes.add(earthquake);
+                Earthquake earthquake = new Earthquake(magnitude, location, time, url);
+                earthquakes.add(earthquake);
 
 
             }
