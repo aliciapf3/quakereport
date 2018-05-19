@@ -206,8 +206,8 @@ public class EarthquakeActivity extends AppCompatActivity
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (earthquakes != null && !earthquakes.isEmpty()) {
-            mAdapter.addAll(earthquakes);
-
+            //mAdapter.addAll(earthquakes);
+            updateUi(earthquakes);
 
         }
     }
@@ -237,6 +237,3 @@ public class EarthquakeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 }
-
-
-
